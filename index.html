@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HerzFunke — Eine private Nachricht für dich</title>
+<title>HerzFunke — Du hast 1 neue Nachricht</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❦</text></svg>">
 <meta name="description" content="Exklusive 40+ Community für reife Begegnungen.">
 <style>
@@ -22,11 +22,26 @@ body{font-family:'Georgia',serif;background:linear-gradient(135deg,#f4e4d6 0%,#e
 h1{font-size:26px;text-align:center;line-height:1.4;margin:20px 0 14px;font-weight:500;color:#3d2817;font-family:'Georgia',serif;}
 h1 .accent{color:#b8743a;font-style:italic;font-weight:500;}
 .intro{color:#6b5544;font-size:14px;text-align:center;line-height:1.7;margin-bottom:26px;font-family:system-ui,sans-serif;font-style:normal;}
+
+/* Превью фото с блюром (как в оригинале) */
+.preview-wrap{position:relative;margin-bottom:26px;cursor:pointer;border-radius:8px;overflow:hidden;border:1px solid #c9a98a;box-shadow:0 8px 24px rgba(120,70,40,0.2);}
+.preview-img{display:block;width:100%;height:280px;object-fit:cover;filter:blur(14px);transform:scale(1.1);transition:transform 0.4s;}
+.preview-wrap:hover .preview-img{transform:scale(1.15);}
+.preview-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.55) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.preview-badge{background:rgba(255,255,255,0.95);color:#8b3a3a;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:6px;}
+.preview-badge::before{content:'';display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite;}
+.preview-cta{background:rgba(255,255,255,0.97);color:#3d2817;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:600;font-family:'Georgia',serif;box-shadow:0 6px 20px rgba(0,0,0,0.25);display:flex;align-items:center;gap:8px;}
+.preview-cta-icon{width:18px;height:18px;background:#b8743a;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* Карточка контакта (показывается после клика на превью) */
+.contact-section{display:none;animation:fadeIn 0.5s;}
+.contact-section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .contact-card{background:#f9f0e8;border:1px solid #e0c8a8;border-radius:6px;padding:18px;margin-bottom:22px;font-family:system-ui,sans-serif;}
 .contact-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
 .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#8b3a3a 0%,#b8743a 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;font-family:'Georgia',serif;position:relative;flex-shrink:0;}
 .status-dot{position:absolute;bottom:0;right:0;width:12px;height:12px;background:#5a7a3e;border:2px solid #f9f0e8;border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
 .contact-info{flex:1;}
 .contact-name{color:#3d2817;font-weight:700;font-size:14px;}
 .contact-status{color:#5a7a3e;font-size:11px;font-weight:600;}
@@ -38,14 +53,15 @@ h1 .accent{color:#b8743a;font-style:italic;font-weight:500;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,58,58,0.4);}
 .btn-secondary{background:linear-gradient(135deg,#b8743a 0%,#8b3a3a 100%);box-shadow:0 8px 24px rgba(184,116,58,0.25);}
 .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(184,116,58,0.4);}
+
+/* Возрастной gate (показывается после клика на Nachricht lesen) */
 .age-prompt{display:none;margin-top:24px;padding-top:24px;border-top:1px solid #e0c8a8;}
 .age-prompt.active{display:block;animation:fadeIn 0.5s;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .age-prompt-text{color:#5a4838;font-size:14px;text-align:center;line-height:1.7;margin-bottom:18px;font-family:system-ui,sans-serif;}
 .age-prompt-text .nick{color:#b8743a;font-weight:700;font-family:'Georgia',serif;font-style:italic;}
 .footer{text-align:center;margin-top:28px;color:#8b6f4e;font-size:10px;font-family:system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;}
 .footer-divider{margin:0 auto 14px;width:40px;height:1px;background:#c9a98a;}
-@media (max-width:480px){.container{padding:36px 28px;}h1{font-size:22px;}.brand-name{font-size:28px;}.btn{font-size:15px;padding:16px;}}
+@media (max-width:480px){.container{padding:36px 28px;}h1{font-size:22px;}.brand-name{font-size:28px;}.btn{font-size:15px;padding:16px;}.preview-img{height:220px;}}
 </style>
 </head>
 <body>
@@ -62,6 +78,18 @@ h1 .accent{color:#b8743a;font-style:italic;font-weight:500;}
 </div>
 <h1>Eine <span class="accent">Nachricht</span> für dich</h1>
 <p class="intro">Ich hinterlasse dir hier meine private Nachricht. Sag mir Bescheid, ob du heute Lust auf ein bisschen Abenteuer hast... lass mich nicht zu lange warten.</p>
+
+<!-- Заблюренное превью фото (как в оригинале) -->
+<div class="preview-wrap" id="previewWrap" onclick="showContact()">
+<img src="https://images.pexels.com/photos/33585718/pexels-photo-33585718.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Private Vorschau" class="preview-img">
+<div class="preview-overlay">
+<div class="preview-badge">LIVE</div>
+<div class="preview-cta"><div class="preview-cta-icon">▶</div> Nachricht anzeigen</div>
+</div>
+</div>
+
+<!-- Карточка контакта (скрыта изначально) -->
+<div class="contact-section" id="contactSection">
 <div class="contact-card">
 <div class="contact-header">
 <div class="avatar" id="avatarInitial">C<div class="status-dot"></div></div>
@@ -83,16 +111,28 @@ h1 .accent{color:#b8743a;font-style:italic;font-weight:500;}
 <a href="https://go.cm-trk6.com/aff_f?h=Bjgjxo" class="btn btn-secondary" target="_blank" rel="noopener">Ich bin 45 oder älter</a>
 </div>
 </div>
+</div>
+
 <div class="footer">
 <div class="footer-divider"></div>
 HerzFunke · 2026 · Privat &amp; Diskret
 </div>
 </div>
+
 <script>
 var names=['Anna','Lena','Julia','Sophie','Mia','Emma','Sarah','Lisa','Laura','Nina','Sandra','Petra','Claudia','Monika','Andrea','Maria','Karin','Susanne','Stefanie','Christina','Nadine','Jessica','Melanie','Tanja','Vanessa','Katja','Daniela','Manuela','Sabine','Heike','Birgit','Silke','Martina','Angela','Ute','Gabi','Bianca','Carmen','Diana','Ramona'];
 var adjectives=['heisse','suess','wild','flirty','geheim','diskret','privat','sexy','reife','romantisch','elegante','charmante','verspielt','liebreizend','bezaubernd'];
 var prefixes=['nur','deine','meine','wirklich','wahre','einsam'];
 var suffixes=['rose','blume','engel','schatz','herz','traum','seele','perle','diamant'];
+var previewImages=[
+'https://images.pexels.com/photos/33585718/pexels-photo-33585718.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/30884261/pexels-photo-30884261.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/34098906/pexels-photo-34098906.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/32160348/pexels-photo-32160348.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/33559317/pexels-photo-33559317.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/34267939/pexels-photo-34267939.jpeg?auto=compress&cs=tinysrgb&w=800',
+'https://images.pexels.com/photos/36697364/pexels-photo-36697364.jpeg?auto=compress&cs=tinysrgb&w=800'
+];
 function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function randAge(){return 40+Math.floor(Math.random()*20);}
 function generateNick(){
@@ -109,11 +149,22 @@ case 5:return rand(prefixes)+'_'+nameLower+'_'+age;
 default:return 'anna_'+age;
 }
 }
+// При загрузке: случайное имя, аватарка, ник, превью
 var randomName=rand(names);
 var randomAge=randAge();
 document.getElementById('contactName').textContent=randomName+', '+randomAge;
 document.getElementById('avatarInitial').firstChild.textContent=randomName.charAt(0);
 document.getElementById('nickname').textContent=generateNick();
+document.querySelector('.preview-img').src=rand(previewImages);
+
+// Клик на превью — показать карточку контакта
+function showContact(){
+document.getElementById('previewWrap').style.display='none';
+document.getElementById('contactSection').classList.add('active');
+window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+// Клик на Nachricht lesen — показать возрастной gate
 function showAgePrompt(){
 document.getElementById('initialCta').style.display='none';
 document.getElementById('agePrompt').classList.add('active');
