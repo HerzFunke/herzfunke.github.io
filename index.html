@@ -23,7 +23,7 @@ h1{font-size:26px;text-align:center;line-height:1.4;margin:20px 0 14px;font-weig
 h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;font-weight:500;}
 .intro{color:#b89098;font-size:14px;text-align:center;line-height:1.7;margin-bottom:26px;font-family:system-ui,sans-serif;font-style:normal;}
 
-/* Вертикальное превью фото с обводкой */
+/* Вертикальное превью фото с обводкой и плавным появлением */
 .preview-wrap{position:relative;margin:0 auto 26px;cursor:pointer;border-radius:16px;overflow:hidden;width:240px;height:340px;
  box-shadow:
  0 0 0 3px #c41e3a,
@@ -32,6 +32,11 @@ h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-bac
  0 20px 50px rgba(0,0,0,0.6),
  0 0 60px rgba(196,30,58,0.3);
  background:#0a0608;
+ animation:photoAppear 0.7s ease-out;
+}
+@keyframes photoAppear{
+ 0%{opacity:0;transform:scale(0.97);}
+ 100%{opacity:1;transform:scale(1);}
 }
 .preview-img{display:block;width:100%;height:100%;object-fit:cover;filter:blur(16px);transform:scale(1.15);transition:filter 0.4s,transform 0.4s;}
 .preview-wrap:hover .preview-img{transform:scale(1.2);}
@@ -39,13 +44,56 @@ h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-bac
 .preview-badge{background:rgba(255,255,255,0.95);color:#8b1538;padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:6px;align-self:flex-start;}
 .preview-badge::before{content:'';display:inline-block;width:7px;height:7px;background:#dc143c;border-radius:50%;animation:livepulse 1.2s infinite;}
 @keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);}}
-.preview-center-info{text-align:center;color:#fff;font-family:system-ui,sans-serif;}
-.preview-info-text{font-size:13px;font-weight:600;margin-bottom:4px;text-shadow:0 1px 4px rgba(0,0,0,0.8);}
-.preview-info-sub{font-size:11px;opacity:0.85;text-shadow:0 1px 4px rgba(0,0,0,0.8);}
 
-/* Пульсирующая кнопка (общий класс) */
-.pulse-btn{position:relative;background:linear-gradient(135deg,#8b1538 0%,#c41e3a 100%);color:#fff;padding:13px 28px;border-radius:30px;font-size:14px;font-weight:600;font-family:'Georgia',serif;letter-spacing:0.5px;box-shadow:0 8px 24px rgba(196,30,58,0.5);animation:btnpulse 2s infinite;border:none;cursor:pointer;}
-@keyframes btnpulse{0%,100%{box-shadow:0 0 0 0 rgba(220,20,60,0.6),0 8px 24px rgba(196,30,58,0.5);transform:scale(1);}50%{box-shadow:0 0 0 16px rgba(220,20,60,0),0 8px 24px rgba(196,30,58,0.5);transform:scale(1.05);}}
+/* Изящная золотая кнопка на превью */
+.pulse-btn{
+ position:relative;
+ background:rgba(0,0,0,0.35);
+ color:#f4d97a;
+ padding:11px 26px;
+ border:1px solid #d4af37;
+ border-radius:30px;
+ font-size:12px;
+ font-weight:400;
+ font-family:'Georgia',serif;
+ letter-spacing:2.5px;
+ text-transform:uppercase;
+ cursor:pointer;
+ backdrop-filter:blur(6px);
+ -webkit-backdrop-filter:blur(6px);
+ text-shadow:0 0 8px rgba(212,175,55,0.5);
+ opacity:0;
+ transform:translateY(8px);
+ animation:btnAppear 0.8s ease-out 1.2s forwards, btnpulse 2.4s ease-in-out 2s infinite;
+ transition:background 0.3s, color 0.3s;
+}
+.pulse-btn:hover{background:rgba(0,0,0,0.55);color:#fff8dc;}
+
+@keyframes btnAppear{
+ 0%{opacity:0;transform:translateY(8px);}
+ 100%{opacity:1;transform:translateY(0);}
+}
+
+@keyframes btnpulse{
+ 0%,100%{
+ box-shadow:0 0 0 0 rgba(212,175,55,0.55), 0 0 12px rgba(212,175,55,0.3);
+ border-color:#d4af37;
+ transform:scale(1);
+ }
+ 50%{
+ box-shadow:0 0 0 14px rgba(212,175,55,0), 0 0 22px rgba(244,217,122,0.6);
+ border-color:#f4d97a;
+ transform:scale(1.04);
+ }
+}
+
+/* Остановка пульсации после клика */
+.no-pulse{
+ animation:btnAppear 0.8s ease-out forwards !important;
+ box-shadow:0 0 12px rgba(212,175,55,0.25) !important;
+ border-color:#d4af37 !important;
+ opacity:1 !important;
+}
 
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 
@@ -69,8 +117,21 @@ h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-bac
 .btn-secondary{background:linear-gradient(135deg,#c41e3a 0%,#8b1538 100%);box-shadow:0 8px 24px rgba(139,21,56,0.3);}
 .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,21,56,0.5);}
 
-/* Пульсирующая версия — для побуждения к нажатию */
-.btn.pulsing{animation:btnpulse 2s infinite;}
+/* Пульсирующая версия CTA-кнопок — золотое мерцание */
+.btn.pulsing{
+ animation:btnpulseGold 2.4s ease-in-out infinite;
+ position:relative;
+}
+@keyframes btnpulseGold{
+ 0%,100%{
+ box-shadow:0 0 0 0 rgba(212,175,55,0.5), 0 8px 24px rgba(196,30,58,0.3);
+ transform:scale(1);
+ }
+ 50%{
+ box-shadow:0 0 0 14px rgba(212,175,55,0), 0 8px 32px rgba(244,217,122,0.4);
+ transform:scale(1.03);
+ }
+}
 
 /* Возрастной gate */
 .age-prompt{display:none;margin-top:24px;padding-top:24px;border-top:1px solid #5a1828;}
@@ -102,11 +163,7 @@ h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-bac
 <img src="https://images.pexels.com/photos/33585718/pexels-photo-33585718.jpeg?auto=compress&cs=tinysrgb&h=600" alt="Private Vorschau" class="preview-img">
 <div class="preview-overlay">
 <div class="preview-badge">LIVE</div>
-<div class="preview-center-info">
-<div class="preview-info-text">📷 Privates Foto</div>
-<div class="preview-info-sub">Gesperrt — klicke zum Anzeigen</div>
-</div>
-<button class="pulse-btn" id="previewBtn">Nachricht anzeigen</button>
+<button class="pulse-btn" id="previewBtn">Nachricht ansehen</button>
 </div>
 </div>
 
@@ -177,9 +234,24 @@ document.getElementById('avatarInitial').firstChild.textContent=randomName.charA
 document.getElementById('nickname').textContent=generateNick();
 document.querySelector('.preview-img').src=rand(previewImages);
 
-// Шаг 1 → 2: останавливаем пульсацию первой кнопки, запускаем на второй
+// Шаг 1 → 2: останавливаем пульс верхней, включаем на средней
 function showContact(){
-// Останавливаем пульсацию на кнопке превью
-var previewBtn=document.getElementById('previewBtn');
-previewBtn.style.animation='none';
-// Показываем секцию с 
+document.getElementById('previewBtn').classList.add('no-pulse');
+var section=document.getElementById('contactSection');
+section.classList.add('active');
+document.getElementById('nachrichtBtn').classList.add('pulsing');
+setTimeout(function(){section.scrollIntoView({behavior:'smooth',block:'center'});},150);
+}
+
+// Шаг 2 → 3: останавливаем пульс средней, включаем на нижней (возрастной)
+function showAgePrompt(){
+document.getElementById('nachrichtBtn').classList.remove('pulsing');
+document.getElementById('initialCta').style.display='none';
+var prompt=document.getElementById('agePrompt');
+prompt.classList.add('active');
+document.getElementById('ageBtn2').classList.add('pulsing');
+setTimeout(function(){prompt.scrollIntoView({behavior:'smooth',block:'center'});},150);
+}
+</script>
+</body>
+</html>
