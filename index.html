@@ -142,7 +142,122 @@ h1 .accent{background:linear-gradient(90deg,#dc143c 0%,#ff6b85 100%);-webkit-bac
 .footer{text-align:center;margin-top:28px;color:#8a5a6a;font-size:10px;font-family:system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;}
 .footer-divider{margin:0 auto 14px;width:40px;height:1px;background:#5a1828;}
 @media (max-width:480px){.container{padding:36px 28px;}h1{font-size:22px;}.brand-name{font-size:28px;}.btn{font-size:15px;padding:16px;}.preview-wrap{width:200px;height:285px;}}
+
+
+/* ===== AUTO LOCALIZATION / RTL ===== */
+[dir="rtl"] { text-align: right; }
+[dir="rtl"] .container { direction: rtl; }
+[dir="rtl"] .brand, [dir="rtl"] h1, [dir="rtl"] .intro, [dir="rtl"] .footer, [dir="rtl"] .message-bubble, [dir="rtl"] .message-hint, [dir="rtl"] .age-prompt-text { text-align: center; }
+[dir="rtl"] .contact-header { flex-direction: row-reverse; }
+[dir="rtl"] .status-dot { right: auto; left: 0; }
+
 </style>
+
+<script>
+const LANG_META = {
+  'de-DE': { html:'de', dir:'ltr' }, 'de-AT': { html:'de', dir:'ltr' }, 'de-CH': { html:'de', dir:'ltr' },
+  'en-US': { html:'en', dir:'ltr' }, 'fr-FR': { html:'fr', dir:'ltr' }, 'it-IT': { html:'it', dir:'ltr' },
+  'es-ES': { html:'es', dir:'ltr' }, 'nl-NL': { html:'nl', dir:'ltr' }, 'pl-PL': { html:'pl', dir:'ltr' },
+  'cs-CZ': { html:'cs', dir:'ltr' }, 'sv-SE': { html:'sv', dir:'ltr' }, 'nb-NO': { html:'no', dir:'ltr' },
+  'da-DK': { html:'da', dir:'ltr' }, 'lv-LV': { html:'lv', dir:'ltr' }, 'lt-LT': { html:'lt', dir:'ltr' },
+  'he-IL': { html:'he', dir:'rtl' }
+};
+
+const COUNTRY_TO_LOCALE = {
+  DE:'de-DE', AT:'de-AT', CH:'de-CH', US:'en-US', GB:'en-US', CA:'en-US', AU:'en-US', NZ:'en-US', IE:'en-US',
+  FR:'fr-FR', IT:'it-IT', ES:'es-ES', NL:'nl-NL', PL:'pl-PL', CZ:'cs-CZ', SE:'sv-SE', NO:'nb-NO', DK:'da-DK',
+  LV:'lv-LV', LT:'lt-LT', IL:'he-IL'
+};
+
+const I18N = {
+  'de-DE': { title:'HerzFunke — Du hast 1 neue Nachricht', description:'Exklusive 40+ Community für reife Begegnungen.', tagline:'Private Botschaften', h1a:'Eine ', h1b:'Nachricht', h1c:' für dich', intro:'Ich hinterlasse dir hier meine private Nachricht. Sag mir Bescheid, ob du heute Lust auf ein bisschen Abenteuer hast... lass mich nicht zu lange warten.', live:'LIVE', preview:'Nachricht ansehen', contactStatus:'● gerade aktiv', message:'"Ich habe meine Fotos für dich freigeschaltet... kommst du rein? 😉"', hint:'Klicke unten, um den Zugriff zu erhalten', read:'Nachricht lesen', ageText:'Nur noch ein Schritt, bis wir unsere Zeit gemeinsam genießen können. Mein privates Profil ist auf einem <strong>kostenlosen</strong>, aber geschlossenen Portal.<br><br>Wähle dein Alter aus und finde mich unter dem Namen: <span class="nick" id="nickname">heisse_claudia44</span>.', under:'Ich bin unter 45', over:'Ich bin 45 oder älter', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'de-AT': { title:'HerzFunke — Du hast 1 neue Nachricht', description:'Exklusive 40+ Community für echte Begegnungen.', tagline:'Private Botschaften', h1a:'Eine ', h1b:'Nachricht', h1c:' für dich', intro:'Ich habe dir hier eine private Nachricht hinterlassen. Sag mir, ob du heute Lust auf ein kleines Abenteuer hast... lass mich nicht zu lange warten.', live:'LIVE', preview:'Nachricht ansehen', contactStatus:'● gerade aktiv', message:'"Ich habe meine Fotos für dich freigeschaltet... kommst du rein? 😉"', hint:'Klicke unten, um Zugriff zu erhalten', read:'Nachricht lesen', ageText:'Nur noch ein Schritt, bis wir unsere Zeit gemeinsam genießen können. Mein privates Profil ist auf einem <strong>kostenlosen</strong>, geschlossenen Portal.<br><br>Wähle dein Alter aus und finde mich unter dem Namen: <span class="nick" id="nickname">heisse_claudia44</span>.', under:'Ich bin unter 45', over:'Ich bin 45 oder älter', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'de-CH': { title:'HerzFunke — Du hast 1 neue Nachricht', description:'Diskrete 40+ Community für echte Begegnungen.', tagline:'Private Nachrichten', h1a:'Eine ', h1b:'Nachricht', h1c:' für dich', intro:'Ich habe dir hier eine private Nachricht hinterlassen. Sag mir, ob du heute Lust auf eine diskrete Begegnung hast... lass mich nicht zu lange warten.', live:'LIVE', preview:'Nachricht ansehen', contactStatus:'● gerade aktiv', message:'"Ich habe meine Fotos für dich freigeschaltet... kommst du rein? 😉"', hint:'Klicke unten, um den Zugriff zu erhalten', read:'Nachricht lesen', ageText:'Nur noch ein Schritt, bis wir unsere Zeit gemeinsam geniessen können. Mein privates Profil ist auf einem <strong>kostenlosen</strong>, aber geschlossenen Portal.<br><br>Wähle dein Alter aus und finde mich unter dem Namen: <span class="nick" id="nickname">heisse_claudia44</span>.', under:'Ich bin unter 45', over:'Ich bin 45 oder älter', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'en-US': { title:'HerzFunke — You have 1 new message', description:'Exclusive 40+ community for mature connections.', tagline:'Private Messages', h1a:'A ', h1b:'message', h1c:' for you', intro:'I left you a private message here. Let me know if you feel like a little adventure today... don’t keep me waiting too long.', live:'LIVE', preview:'View message', contactStatus:'● active now', message:'"I unlocked my photos for you... are you coming in? 😉"', hint:'Click below to get access', read:'Read message', ageText:'Just one more step before we can enjoy our time together. My private profile is on a <strong>free</strong>, closed portal.<br><br>Choose your age and find me under the name: <span class="nick" id="nickname">hot_claudia44</span>.', under:'I am under 45', over:'I am 45 or older', footer:'HerzFunke · 2026 · Private & Discreet' },
+  'fr-FR': { title:'HerzFunke — Vous avez 1 nouveau message', description:'Communauté 40+ exclusive pour des rencontres matures.', tagline:'Messages privés', h1a:'Un ', h1b:'message', h1c:' pour vous', intro:'Je vous ai laissé un message privé ici. Dites-moi si vous avez envie d’un peu d’aventure aujourd’hui... ne me faites pas trop attendre.', live:'LIVE', preview:'Voir le message', contactStatus:'● active maintenant', message:'"J’ai débloqué mes photos pour vous... vous entrez ? 😉"', hint:'Cliquez ci-dessous pour obtenir l’accès', read:'Lire le message', ageText:'Plus qu’une étape avant de profiter de notre moment ensemble. Mon profil privé se trouve sur un portail <strong>gratuit</strong> mais fermé.<br><br>Choisissez votre âge et retrouvez-moi sous le nom : <span class="nick" id="nickname">claudia_privee44</span>.', under:'J’ai moins de 45 ans', over:'J’ai 45 ans ou plus', footer:'HerzFunke · 2026 · Privé & Discret' },
+  'it-IT': { title:'HerzFunke — Hai 1 nuovo messaggio', description:'Community esclusiva 40+ per incontri maturi.', tagline:'Messaggi privati', h1a:'Un ', h1b:'messaggio', h1c:' per te', intro:'Ti ho lasciato qui un messaggio privato. Fammi sapere se oggi hai voglia di un po’ di avventura... non farmi aspettare troppo.', live:'LIVE', preview:'Vedi messaggio', contactStatus:'● attiva ora', message:'"Ho sbloccato le mie foto per te... entri? 😉"', hint:'Clicca sotto per ottenere l’accesso', read:'Leggi messaggio', ageText:'Solo un ultimo passo prima di goderci il nostro tempo insieme. Il mio profilo privato è su un portale <strong>gratuito</strong> ma chiuso.<br><br>Scegli la tua età e cercami con il nome: <span class="nick" id="nickname">calda_claudia44</span>.', under:'Ho meno di 45 anni', over:'Ho 45 anni o più', footer:'HerzFunke · 2026 · Privato & Discreto' },
+  'es-ES': { title:'HerzFunke — Tienes 1 mensaje nuevo', description:'Comunidad exclusiva 40+ para encuentros maduros.', tagline:'Mensajes privados', h1a:'Un ', h1b:'mensaje', h1c:' para ti', intro:'Te he dejado aquí un mensaje privado. Dime si hoy te apetece un poco de aventura... no me hagas esperar demasiado.', live:'LIVE', preview:'Ver mensaje', contactStatus:'● activa ahora', message:'"He desbloqueado mis fotos para ti... ¿entras? 😉"', hint:'Haz clic abajo para obtener acceso', read:'Leer mensaje', ageText:'Solo falta un paso para disfrutar de nuestro momento juntos. Mi perfil privado está en un portal <strong>gratuito</strong> pero cerrado.<br><br>Elige tu edad y búscame con el nombre: <span class="nick" id="nickname">caliente_claudia44</span>.', under:'Tengo menos de 45', over:'Tengo 45 o más', footer:'HerzFunke · 2026 · Privado & Discreto' },
+  'nl-NL': { title:'HerzFunke — Je hebt 1 nieuw bericht', description:'Exclusieve 40+ community voor volwassen ontmoetingen.', tagline:'Privéberichten', h1a:'Een ', h1b:'bericht', h1c:' voor jou', intro:'Ik heb hier een privébericht voor je achtergelaten. Laat me weten of je vandaag zin hebt in een beetje avontuur... laat me niet te lang wachten.', live:'LIVE', preview:'Bericht bekijken', contactStatus:'● nu actief', message:'"Ik heb mijn foto’s voor je vrijgegeven... kom je binnen? 😉"', hint:'Klik hieronder om toegang te krijgen', read:'Bericht lezen', ageText:'Nog één stap voordat we samen van onze tijd kunnen genieten. Mijn privéprofiel staat op een <strong>gratis</strong>, besloten portal.<br><br>Kies je leeftijd en vind me onder de naam: <span class="nick" id="nickname">hete_claudia44</span>.', under:'Ik ben jonger dan 45', over:'Ik ben 45 of ouder', footer:'HerzFunke · 2026 · Privé & Discreet' },
+  'pl-PL': { title:'HerzFunke — Masz 1 nową wiadomość', description:'Ekskluzywna społeczność 40+ dla dojrzałych znajomości.', tagline:'Prywatne wiadomości', h1a:'Jedna ', h1b:'wiadomość', h1c:' dla Ciebie', intro:'Zostawiłam Ci tutaj prywatną wiadomość. Daj znać, czy masz dziś ochotę na małą przygodę... nie każ mi czekać zbyt długo.', live:'LIVE', preview:'Zobacz wiadomość', contactStatus:'● aktywna teraz', message:'"Odblokowałam dla Ciebie moje zdjęcia... wejdziesz? 😉"', hint:'Kliknij poniżej, aby uzyskać dostęp', read:'Przeczytaj wiadomość', ageText:'Jeszcze tylko jeden krok, zanim będziemy mogli spędzić razem czas. Mój prywatny profil jest na <strong>darmowym</strong>, zamkniętym portalu.<br><br>Wybierz swój wiek i znajdź mnie pod nazwą: <span class="nick" id="nickname">goraca_claudia44</span>.', under:'Mam mniej niż 45 lat', over:'Mam 45 lat lub więcej', footer:'HerzFunke · 2026 · Prywatnie & Dyskretnie' },
+  'cs-CZ': { title:'HerzFunke — Máte 1 novou zprávu', description:'Exkluzivní komunita 40+ pro zralá setkání.', tagline:'Soukromé zprávy', h1a:'Jedna ', h1b:'zpráva', h1c:' pro vás', intro:'Nechala jsem vám tady soukromou zprávu. Dejte mi vědět, jestli máte dnes chuť na malé dobrodružství... nenechte mě čekat moc dlouho.', live:'LIVE', preview:'Zobrazit zprávu', contactStatus:'● právě aktivní', message:'"Odemkla jsem pro vás své fotky... vstoupíte? 😉"', hint:'Klikněte níže pro získání přístupu', read:'Přečíst zprávu', ageText:'Už jen jeden krok, než si můžeme užít společný čas. Můj soukromý profil je na <strong>bezplatném</strong>, uzavřeném portálu.<br><br>Vyberte svůj věk a najděte mě pod jménem: <span class="nick" id="nickname">horka_claudia44</span>.', under:'Je mi méně než 45', over:'Je mi 45 nebo více', footer:'HerzFunke · 2026 · Soukromě & Diskrétně' },
+  'sv-SE': { title:'HerzFunke — Du har 1 nytt meddelande', description:'Exklusiv 40+ community för mogna möten.', tagline:'Privata meddelanden', h1a:'Ett ', h1b:'meddelande', h1c:' till dig', intro:'Jag har lämnat ett privat meddelande till dig här. Säg till om du är sugen på lite äventyr idag... låt mig inte vänta för länge.', live:'LIVE', preview:'Visa meddelande', contactStatus:'● aktiv nu', message:'"Jag har låst upp mina bilder för dig... kommer du in? 😉"', hint:'Klicka nedan för att få tillgång', read:'Läs meddelande', ageText:'Bara ett steg till innan vi kan njuta av vår tid tillsammans. Min privata profil finns på en <strong>gratis</strong>, stängd portal.<br><br>Välj din ålder och hitta mig under namnet: <span class="nick" id="nickname">heta_claudia44</span>.', under:'Jag är under 45', over:'Jag är 45 eller äldre', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'nb-NO': { title:'HerzFunke — Du har 1 ny melding', description:'Eksklusivt 40+ fellesskap for modne møter.', tagline:'Private meldinger', h1a:'En ', h1b:'melding', h1c:' til deg', intro:'Jeg har lagt igjen en privat melding til deg her. Si fra om du har lyst på litt eventyr i dag... ikke la meg vente for lenge.', live:'LIVE', preview:'Se melding', contactStatus:'● aktiv nå', message:'"Jeg har låst opp bildene mine for deg... kommer du inn? 😉"', hint:'Klikk nedenfor for å få tilgang', read:'Les melding', ageText:'Bare ett steg igjen før vi kan nyte tiden sammen. Min private profil ligger på en <strong>gratis</strong>, lukket portal.<br><br>Velg alderen din og finn meg under navnet: <span class="nick" id="nickname">hete_claudia44</span>.', under:'Jeg er under 45', over:'Jeg er 45 eller eldre', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'da-DK': { title:'HerzFunke — Du har 1 ny besked', description:'Eksklusivt 40+ fællesskab for modne møder.', tagline:'Private beskeder', h1a:'En ', h1b:'besked', h1c:' til dig', intro:'Jeg har lagt en privat besked til dig her. Sig til, hvis du har lyst til lidt eventyr i dag... lad mig ikke vente for længe.', live:'LIVE', preview:'Se besked', contactStatus:'● aktiv nu', message:'"Jeg har låst mine billeder op for dig... kommer du ind? 😉"', hint:'Klik nedenfor for at få adgang', read:'Læs besked', ageText:'Kun ét skridt mere, før vi kan nyde tiden sammen. Min private profil ligger på en <strong>gratis</strong>, lukket portal.<br><br>Vælg din alder og find mig under navnet: <span class="nick" id="nickname">hede_claudia44</span>.', under:'Jeg er under 45', over:'Jeg er 45 eller ældre', footer:'HerzFunke · 2026 · Privat & Diskret' },
+  'lv-LV': { title:'HerzFunke — Tev ir 1 jauna ziņa', description:'Ekskluzīva 40+ kopiena nobriedušām iepazīšanām.', tagline:'Privātas ziņas', h1a:'Viena ', h1b:'ziņa', h1c:' tev', intro:'Es tev šeit atstāju privātu ziņu. Pasaki, vai šodien vēlies mazliet piedzīvojumu... neliec man gaidīt pārāk ilgi.', live:'LIVE', preview:'Apskatīt ziņu', contactStatus:'● aktīva tagad', message:'"Es atbloķēju savas fotogrāfijas tev... ienāksi? 😉"', hint:'Klikšķini zemāk, lai iegūtu piekļuvi', read:'Lasīt ziņu', ageText:'Vēl tikai viens solis, pirms varam baudīt laiku kopā. Mans privātais profils ir <strong>bezmaksas</strong>, slēgtā portālā.<br><br>Izvēlies savu vecumu un atrodi mani ar vārdu: <span class="nick" id="nickname">karsta_claudia44</span>.', under:'Es esmu jaunāks par 45', over:'Man ir 45 vai vairāk', footer:'HerzFunke · 2026 · Privāti & Diskrēti' },
+  'lt-LT': { title:'HerzFunke — Turite 1 naują žinutę', description:'Išskirtinė 40+ bendruomenė brandžioms pažintims.', tagline:'Privačios žinutės', h1a:'Viena ', h1b:'žinutė', h1c:' jums', intro:'Palikau jums čia privačią žinutę. Parašykite, ar šiandien norėtumėte šiek tiek nuotykių... neleiskite man per ilgai laukti.', live:'LIVE', preview:'Peržiūrėti žinutę', contactStatus:'● aktyvi dabar', message:'"Atrakino savo nuotraukas tau... užeisi? 😉"', hint:'Spustelėkite žemiau, kad gautumėte prieigą', read:'Skaityti žinutę', ageText:'Liko tik vienas žingsnis, kad galėtume mėgautis laiku kartu. Mano privatus profilis yra <strong>nemokamame</strong>, uždarame portale.<br><br>Pasirinkite savo amžių ir raskite mane vardu: <span class="nick" id="nickname">karsta_claudia44</span>.', under:'Man mažiau nei 45', over:'Man 45 arba daugiau', footer:'HerzFunke · 2026 · Privatu & Diskretiška' },
+  'he-IL': { title:'HerzFunke — יש לך הודעה חדשה אחת', description:'קהילת 40+ בלעדית להיכרויות בוגרות.', tagline:'הודעות פרטיות', h1a:'יש ', h1b:'הודעה', h1c:' בשבילך', intro:'השארתי לך כאן הודעה פרטית. תגיד לי אם בא לך היום קצת הרפתקה... אל תיתן לי לחכות יותר מדי.', live:'LIVE', preview:'צפה בהודעה', contactStatus:'● פעילה עכשיו', message:'"פתחתי עבורך את התמונות שלי... תיכנס? 😉"', hint:'לחצו למטה כדי לקבל גישה', read:'קרא הודעה', ageText:'עוד שלב אחד בלבד לפני שנוכל ליהנות מהזמן שלנו יחד. הפרופיל הפרטי שלי נמצא בפורטל <strong>חינמי</strong> וסגור.<br><br>בחר את הגיל שלך ומצא אותי בשם: <span class="nick" id="nickname">claudia44</span>.', under:'אני מתחת לגיל 45', over:'אני בן 45 ומעלה', footer:'HerzFunke · 2026 · פרטי ודיסקרטי' }
+};
+
+function normalizeLanguage(language){
+  const lang=(language||'').toLowerCase();
+  if(lang==='de-ch'||lang.startsWith('de-ch'))return'de-CH'; if(lang==='de-at'||lang.startsWith('de-at'))return'de-AT'; if(lang==='de'||lang.startsWith('de-'))return'de-DE';
+  if(lang==='pl'||lang.startsWith('pl-'))return'pl-PL'; if(lang==='nl'||lang.startsWith('nl-'))return'nl-NL'; if(lang==='no'||lang.startsWith('no-')||lang==='nb'||lang.startsWith('nb-')||lang==='nn'||lang.startsWith('nn-'))return'nb-NO';
+  if(lang==='sv'||lang.startsWith('sv-'))return'sv-SE'; if(lang==='da'||lang.startsWith('da-'))return'da-DK'; if(lang==='fr'||lang.startsWith('fr-'))return'fr-FR'; if(lang==='it'||lang.startsWith('it-'))return'it-IT';
+  if(lang==='es'||lang.startsWith('es-'))return'es-ES'; if(lang==='cs'||lang.startsWith('cs-'))return'cs-CZ'; if(lang==='lv'||lang.startsWith('lv-'))return'lv-LV'; if(lang==='lt'||lang.startsWith('lt-'))return'lt-LT';
+  if(lang==='he'||lang.startsWith('he-')||lang==='iw'||lang.startsWith('iw-'))return'he-IL'; if(lang==='en'||lang.startsWith('en-'))return'en-US'; return null;
+}
+
+function getLocaleFromBrowser(){
+  const langs=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language];
+  for(const l of langs){const matched=normalizeLanguage(l); if(matched&&I18N[matched])return matched;}
+  return null;
+}
+
+async function getLocaleFromRegion(){
+  try{
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),1200);
+    const res=await fetch('https://ipapi.co/json/',{signal:controller.signal});
+    clearTimeout(timer);
+    if(!res.ok)return null;
+    const data=await res.json();
+    const code=(data&&data.country_code||'').toUpperCase();
+    return COUNTRY_TO_LOCALE[code]||null;
+  }catch(e){return null;}
+}
+
+function getInitialLocale(){
+  const params=new URLSearchParams(window.location.search);
+  const urlLang=params.get('lang');
+  if(urlLang&&I18N[urlLang])return urlLang;
+  return getLocaleFromBrowser()||'de-DE';
+}
+
+let CURRENT_LOCALE=getInitialLocale();
+let T=I18N[CURRENT_LOCALE]||I18N['de-DE'];
+
+function applyLocale(){
+  const meta=LANG_META[CURRENT_LOCALE]||LANG_META['de-DE'];
+  document.documentElement.lang=meta.html;
+  document.documentElement.dir=meta.dir;
+  document.title=T.title;
+  const desc=document.querySelector('meta[name="description"]'); if(desc)desc.setAttribute('content',T.description);
+  const tagline=document.querySelector('.brand-tagline'); if(tagline)tagline.textContent=T.tagline;
+  const h1=document.querySelector('h1'); if(h1)h1.innerHTML=T.h1a+'<span class="accent">'+T.h1b+'</span>'+T.h1c;
+  const intro=document.querySelector('.intro'); if(intro)intro.textContent=T.intro;
+  const badge=document.querySelector('.preview-badge'); if(badge)badge.textContent=T.live;
+  const preview=document.getElementById('previewBtn'); if(preview)preview.textContent=T.preview;
+  const status=document.querySelector('.contact-status'); if(status)status.textContent=T.contactStatus;
+  const bubble=document.querySelector('.message-bubble'); if(bubble)bubble.textContent=T.message;
+  const hint=document.querySelector('.message-hint'); if(hint)hint.textContent=T.hint;
+  const read=document.getElementById('nachrichtBtn'); if(read)read.textContent=T.read;
+  const ageText=document.querySelector('.age-prompt-text'); if(ageText)ageText.innerHTML=T.ageText;
+  const under=document.getElementById('ageBtn1'); if(under)under.textContent=T.under;
+  const over=document.getElementById('ageBtn2'); if(over)over.textContent=T.over;
+  const footer=document.querySelector('.footer'); if(footer)footer.innerHTML='<div class="footer-divider"></div>'+T.footer;
+}
+
+async function refineLocaleByRegion(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('lang'))return;
+  const regionLocale=await getLocaleFromRegion();
+  const browserLocale=getLocaleFromBrowser();
+  if(regionLocale&&regionLocale!==CURRENT_LOCALE&&(!browserLocale||browserLocale==='de-DE')){
+    CURRENT_LOCALE=regionLocale; T=I18N[CURRENT_LOCALE]||I18N['de-DE']; applyLocale();
+  }
+}
+</script>
+
 </head>
 <body>
 <div class="bg-pattern"></div>
@@ -229,6 +344,8 @@ default:return 'anna_'+age;
 }
 var randomName=rand(names);
 var randomAge=randAge();
+applyLocale();
+refineLocaleByRegion();
 document.getElementById('contactName').textContent=randomName+', '+randomAge;
 document.getElementById('avatarInitial').firstChild.textContent=randomName.charAt(0);
 document.getElementById('nickname').textContent=generateNick();
